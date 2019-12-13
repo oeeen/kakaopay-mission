@@ -14,6 +14,9 @@ public class Institute {
 
     private String name;
 
+    private Institute() {
+    }
+
     public Institute(String name) {
         this.name = name;
     }

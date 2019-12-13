@@ -5,4 +5,15 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Amount {
     private Integer amount;
+
+    private Amount() {
+    }
+
+    public Amount(final String amount) {
+        this.amount = Integer.parseInt(validate(amount));
+    }
+
+    private String validate(String amount) {
+        return amount.replaceAll(",", "");
+    }
 }

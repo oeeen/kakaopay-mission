@@ -1,6 +1,5 @@
-package dev.smjeon.kakaopay.util;
+package dev.smjeon.kakaopay.domain;
 
-import dev.smjeon.kakaopay.domain.Row;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
