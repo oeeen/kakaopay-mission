@@ -44,6 +44,7 @@ public class FundService {
     private List<Fund> convertToFund(List<Row> rows) {
         List<Fund> funds = new ArrayList<>();
         Row firstRow = rows.get(0);
+
         for (int i = 1; i < rows.size(); i++) {
             funds.addAll(saveFund(rows.get(i), firstRow));
         }
@@ -54,6 +55,7 @@ public class FundService {
         List<Fund> oneRow = new ArrayList<>();
         int year = Integer.parseInt(row.getColumn(0));
         int month = Integer.parseInt(row.getColumn(1));
+
         for (int i = 2; i < row.size(); i++) {
             String column = row.getColumn(i);
             Fund fund = new Fund(
