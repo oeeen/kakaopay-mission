@@ -4,6 +4,7 @@ import dev.smjeon.kakaopay.domain.FundRepository;
 import dev.smjeon.kakaopay.domain.Institute;
 import dev.smjeon.kakaopay.dto.InstituteResponseDto;
 import dev.smjeon.kakaopay.dto.MaxAmountResponseDto;
+import dev.smjeon.kakaopay.dto.MinMaxResponseDto;
 import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -89,6 +90,28 @@ class FundServiceTest {
 
         assertThat(maxAmountResponseDto.getInstituteName()).isEqualTo("신한은행");
         assertThat(maxAmountResponseDto.getYear()).isEqualTo(Year.of(2005));
+
+        verify(fundRepository).findDistinctYear();
+        verify(fundRepository).findSumByYearGroupByInstitute(Year.of(2005));
+    }
+
+    @Test
+    @DisplayName("외환은행의 평균 지원 금액 중 최대값, 최소값 출력 로직")
+    void findAverageMinMax() {
+        List<Year> years = Collections.singletonList(Year.of(2005));
+        List<Object> sumByYearGroupByInstitute = new ArrayList<>();
+        Object[] maxInstitute = {new Institute("외환은행"), 1200L};
+        sumByYearGroupByInstitute.add(maxInstitute);
+        Object[] minInstitute = {new Institute("외환은행"), 120L};
+        sumByYearGroupByInstitute.add(minInstitute);
+
+        given(fundRepository.findDistinctYear()).willReturn(years);
+        given(fundRepository.findSumByYearGroupByInstitute(any(Year.class))).willReturn(sumByYearGroupByInstitute);
+
+        MinMaxResponseDto minMaxResponseDto = fundService.findAverageMinMax();
+
+        assertThat(minMaxResponseDto.getMaximum().getAmount()).isEqualTo(100L);
+        assertThat(minMaxResponseDto.getMinimum().getAmount()).isEqualTo(10L);
 
         verify(fundRepository).findDistinctYear();
         verify(fundRepository).findSumByYearGroupByInstitute(Year.of(2005));
