@@ -14,8 +14,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
-@DirtiesContext
-@AutoConfigureWebTestClient(timeout = "10000")
+@AutoConfigureWebTestClient(timeout = "200000")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class FundApiControllerTest {
 
@@ -23,23 +22,11 @@ class FundApiControllerTest {
     private WebTestClient webTestClient;
 
     @Test
-    @Timeout(value = 10)
+    @Timeout(value = 20)
     @DisplayName(".csv 파일에서 데이터를 읽어와 데이터베이스에 저장합니다.")
+    @DirtiesContext
     void loadCsv() {
-        ClassPathResource classPathResource = new ClassPathResource("input.csv");
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        HttpEntity<ClassPathResource> entity = new HttpEntity<>(classPathResource, headers);
-
-        webTestClient.post()
-                .uri("/amount")
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(BodyInserters.fromMultipartData("file", entity))
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody()
+        readCsv().expectBody()
                 .jsonPath("$..AffectedRows").isNotEmpty();
     }
 
@@ -54,5 +41,38 @@ class FundApiControllerTest {
                 .expectBody()
                 .jsonPath("$..name").isEqualTo("테스트은행")
                 .jsonPath("$..code").isEqualTo("test123");
+    }
+
+    @Test
+    @DisplayName("년도별 각 금융기관의 지원금액 합계를 출력합니다.")
+    @DirtiesContext
+    void totalAmountByYear() {
+        readCsv();
+
+        webTestClient.get()
+                .uri("/years")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .jsonPath("$.[0].year").isEqualTo("2005")
+                .jsonPath("$.[0].totalAmount").isEqualTo(48016)
+                .jsonPath("$.[0].detailAmount.주택도시기금").isEqualTo(22247);
+    }
+
+    WebTestClient.ResponseSpec readCsv() {
+        ClassPathResource classPathResource = new ClassPathResource("input.csv");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        HttpEntity<ClassPathResource> entity = new HttpEntity<>(classPathResource, headers);
+
+        return webTestClient.post()
+                .uri("/amount")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData("file", entity))
+                .exchange()
+                .expectStatus()
+                .isOk();
     }
 }

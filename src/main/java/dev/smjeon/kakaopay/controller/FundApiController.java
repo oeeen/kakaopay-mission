@@ -1,6 +1,7 @@
 package dev.smjeon.kakaopay.controller;
 
-import dev.smjeon.kakaopay.domain.InstituteResponseDto;
+import dev.smjeon.kakaopay.dto.InstituteResponseDto;
+import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import dev.smjeon.kakaopay.service.FundService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,5 +34,11 @@ public class FundApiController {
     public ResponseEntity<List<InstituteResponseDto>> listInstitutes() {
         List<InstituteResponseDto> instituteResponseDtos = fundService.findAllInstitutes();
         return ResponseEntity.ok().body(instituteResponseDtos);
+    }
+
+    @GetMapping("/years")
+    public ResponseEntity getTotalAmountByYear() {
+        List<YearsAmountResponseDto> yearsAmountResponseDtos = fundService.findYearsAmounts();
+        return ResponseEntity.ok().body(yearsAmountResponseDtos);
     }
 }

@@ -4,8 +4,9 @@ import dev.smjeon.kakaopay.domain.Amount;
 import dev.smjeon.kakaopay.domain.Fund;
 import dev.smjeon.kakaopay.domain.FundRepository;
 import dev.smjeon.kakaopay.domain.Institute;
-import dev.smjeon.kakaopay.domain.InstituteResponseDto;
 import dev.smjeon.kakaopay.domain.Row;
+import dev.smjeon.kakaopay.dto.InstituteResponseDto;
+import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import dev.smjeon.kakaopay.util.CsvParser;
 import dev.smjeon.kakaopay.util.InstituteConverter;
 import org.slf4j.Logger;
@@ -16,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.Month;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FundService {
@@ -79,5 +82,33 @@ public class FundService {
         }
 
         return instituteResponseDtos;
+    }
+
+    public List<YearsAmountResponseDto> findYearsAmounts() {
+        List<YearsAmountResponseDto> yearsAmountResponseDtos = new ArrayList<>();
+        List<Year> years = fundRepository.findDistinctYear();
+
+        for (Year year : years) {
+            YearsAmountResponseDto yearsAmountResponseDto = convertToYearsDto(year);
+            yearsAmountResponseDtos.add(yearsAmountResponseDto);
+        }
+
+        return yearsAmountResponseDtos;
+    }
+
+    private YearsAmountResponseDto convertToYearsDto(Year year) {
+        List<Object> sumByYearGroupByInstitute = fundRepository.findSumByYearGroupByInstitute(year);
+        Map<String, Long> detailAmount = new HashMap<>();
+        Long sum = 0L;
+
+        for (Object o : sumByYearGroupByInstitute) {
+            Long amount = ((Long)((Object[])o)[1]);
+            String name = ((Institute)((Object[])o)[0]).getName();
+
+            detailAmount.put(name, amount);
+            sum += amount;
+        }
+
+        return new YearsAmountResponseDto(year, sum, detailAmount);
     }
 }
