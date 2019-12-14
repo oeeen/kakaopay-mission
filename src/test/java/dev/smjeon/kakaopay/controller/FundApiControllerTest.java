@@ -77,6 +77,8 @@ class FundApiControllerTest {
     }
 
     @Test
+    @DisplayName("외환은행의 평균 지원 금액 중 최소값, 최대값을 출력합니다.")
+    @DirtiesContext
     void findKEBAverageMinMax() {
         readCsv();
 
