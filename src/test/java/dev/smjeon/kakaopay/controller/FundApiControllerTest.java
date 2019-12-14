@@ -76,6 +76,22 @@ class FundApiControllerTest {
                 .jsonPath("$..instituteName").isEqualTo("주택도시기금");
     }
 
+    @Test
+    void findKEBAverageMinMax() {
+        readCsv();
+
+        webTestClient.get()
+                .uri("/average")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .jsonPath("$.maximum.year").isEqualTo("2015")
+                .jsonPath("$.minimum.year").isEqualTo("2017")
+                .jsonPath("$.maximum.amount").isEqualTo(1701L)
+                .jsonPath("$.minimum.amount").isEqualTo(0L);
+    }
+
     WebTestClient.ResponseSpec readCsv() {
         ClassPathResource classPathResource = new ClassPathResource("input.csv");
 

@@ -7,11 +7,13 @@ import dev.smjeon.kakaopay.domain.Institute;
 import dev.smjeon.kakaopay.domain.Row;
 import dev.smjeon.kakaopay.dto.InstituteResponseDto;
 import dev.smjeon.kakaopay.dto.MaxAmountResponseDto;
+import dev.smjeon.kakaopay.dto.MinMaxResponseDto;
 import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import dev.smjeon.kakaopay.service.exception.NotFoundMaxAmountException;
 import dev.smjeon.kakaopay.util.CsvParser;
 import dev.smjeon.kakaopay.util.InstituteConverter;
 import dev.smjeon.kakaopay.vo.DetailAmountVo;
+import dev.smjeon.kakaopay.vo.MinMaxVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ import java.util.Map;
 @Transactional
 public class FundService {
     private static final Logger logger = LoggerFactory.getLogger(FundService.class);
+    private static final String KEB = "외환은행";
+    private static final int MONTH_DIVISOR_OFFSET = 12;
 
     private final FundRepository fundRepository;
 
@@ -142,5 +146,34 @@ public class FundService {
             detailAmountVos.add(new DetailAmountVo(year, name, amount));
         }
         return detailAmountVos;
+    }
+
+    public MinMaxResponseDto findAverageMinMax() {
+        List<DetailAmountVo> detailAmountVos = new ArrayList<>();
+        List<Year> years = fundRepository.findDistinctYear();
+
+        for (Year year : years) {
+            detailAmountVos.addAll(convertToDetailAmountVo(year));
+        }
+
+        return convertToMinMaxDto(detailAmountVos);
+    }
+
+    private MinMaxResponseDto convertToMinMaxDto(List<DetailAmountVo> detailAmountVos) {
+        DetailAmountVo maxDetailAmountVo =
+                detailAmountVos.stream()
+                .filter(vo -> vo.getInstituteName().equals(KEB))
+                .max(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
+        MinMaxVo max = new MinMaxVo(maxDetailAmountVo.getYear(),
+                maxDetailAmountVo.getAmount() / MONTH_DIVISOR_OFFSET);
+
+        DetailAmountVo minDetailAmountVo =
+                detailAmountVos.stream()
+                .filter(vo -> vo.getInstituteName().equals(KEB))
+                .min(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
+        MinMaxVo min = new MinMaxVo(minDetailAmountVo.getYear(),
+                minDetailAmountVo.getAmount() / MONTH_DIVISOR_OFFSET);
+
+        return new MinMaxResponseDto(min, max);
     }
 }

@@ -2,6 +2,7 @@ package dev.smjeon.kakaopay.controller;
 
 import dev.smjeon.kakaopay.dto.InstituteResponseDto;
 import dev.smjeon.kakaopay.dto.MaxAmountResponseDto;
+import dev.smjeon.kakaopay.dto.MinMaxResponseDto;
 import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import dev.smjeon.kakaopay.service.FundService;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +51,12 @@ public class FundApiController {
         MaxAmountResponseDto maxAmountResponseDto = fundService.findInstituteByMaxAmount();
 
         return ResponseEntity.ok().body(maxAmountResponseDto);
+    }
+
+    @GetMapping("/average")
+    public ResponseEntity<MinMaxResponseDto> getAverageMinMax() {
+        MinMaxResponseDto minMaxResponseDto = fundService.findAverageMinMax();
+
+        return ResponseEntity.ok().body(minMaxResponseDto);
     }
 }
