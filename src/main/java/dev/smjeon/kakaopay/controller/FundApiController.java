@@ -1,6 +1,7 @@
 package dev.smjeon.kakaopay.controller;
 
 import dev.smjeon.kakaopay.dto.InstituteResponseDto;
+import dev.smjeon.kakaopay.dto.MaxAmountResponseDto;
 import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import dev.smjeon.kakaopay.service.FundService;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class FundApiController {
     }
 
     @PostMapping("/amount")
-    public ResponseEntity saveFunds(MultipartFile file) {
+    public ResponseEntity<Map<String, Integer>> saveFunds(MultipartFile file) {
         int affected = fundService.saveCsv(file);
         Map<String, Integer> body = new HashMap<>();
         body.put("AffectedRows", affected);
@@ -33,12 +34,21 @@ public class FundApiController {
     @GetMapping("/institutes")
     public ResponseEntity<List<InstituteResponseDto>> listInstitutes() {
         List<InstituteResponseDto> instituteResponseDtos = fundService.findAllInstitutes();
+
         return ResponseEntity.ok().body(instituteResponseDtos);
     }
 
     @GetMapping("/years")
-    public ResponseEntity getTotalAmountByYear() {
+    public ResponseEntity<List<YearsAmountResponseDto>> getTotalAmountByYear() {
         List<YearsAmountResponseDto> yearsAmountResponseDtos = fundService.findYearsAmounts();
+
         return ResponseEntity.ok().body(yearsAmountResponseDtos);
+    }
+
+    @GetMapping("/maxfund")
+    public ResponseEntity<MaxAmountResponseDto> getInstituteByMaxAmount() {
+        MaxAmountResponseDto maxAmountResponseDto = fundService.findInstituteByMaxAmount();
+
+        return ResponseEntity.ok().body(maxAmountResponseDto);
     }
 }

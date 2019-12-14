@@ -60,6 +60,22 @@ class FundApiControllerTest {
                 .jsonPath("$.[0].detailAmount.주택도시기금").isEqualTo(22247);
     }
 
+    @Test
+    @DisplayName("전체 지원 금액 중에서 가장 큰 금액의 기관명을 출력합니다.")
+    @DirtiesContext
+    void getInstituteByMaxAmount() {
+        readCsv();
+
+        webTestClient.get()
+                .uri("/maxfund")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .jsonPath("$..year").isEqualTo("2014")
+                .jsonPath("$..instituteName").isEqualTo("주택도시기금");
+    }
+
     WebTestClient.ResponseSpec readCsv() {
         ClassPathResource classPathResource = new ClassPathResource("input.csv");
 

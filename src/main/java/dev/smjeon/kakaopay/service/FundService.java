@@ -6,9 +6,12 @@ import dev.smjeon.kakaopay.domain.FundRepository;
 import dev.smjeon.kakaopay.domain.Institute;
 import dev.smjeon.kakaopay.domain.Row;
 import dev.smjeon.kakaopay.dto.InstituteResponseDto;
+import dev.smjeon.kakaopay.dto.MaxAmountResponseDto;
 import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
+import dev.smjeon.kakaopay.service.exception.NotFoundMaxAmountException;
 import dev.smjeon.kakaopay.util.CsvParser;
 import dev.smjeon.kakaopay.util.InstituteConverter;
+import dev.smjeon.kakaopay.vo.DetailAmountVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.Month;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,5 +114,31 @@ public class FundService {
         }
 
         return new YearsAmountResponseDto(year, sum, detailAmount);
+    }
+
+    public MaxAmountResponseDto findInstituteByMaxAmount() {
+        List<DetailAmountVo> detailAmountVos = new ArrayList<>();
+        List<Year> years = fundRepository.findDistinctYear();
+
+        for (Year year : years) {
+            detailAmountVos.addAll(convertToDetailAmountVo(year));
+        }
+
+        DetailAmountVo detailAmountVo = detailAmountVos.stream()
+                .max(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
+
+        return new MaxAmountResponseDto(detailAmountVo.getYear(), detailAmountVo.getInstituteName());
+    }
+
+    private List<DetailAmountVo> convertToDetailAmountVo(Year year) {
+        List<Object> sumByYearGroupByInstitute = fundRepository.findSumByYearGroupByInstitute(year);
+        List<DetailAmountVo> detailAmountVos = new ArrayList<>();
+
+        for (Object o : sumByYearGroupByInstitute) {
+            String name = ((Institute)((Object[])o)[0]).getName();
+            Long amount = ((Long)((Object[])o)[1]);
+            detailAmountVos.add(new DetailAmountVo(year, name, amount));
+        }
+        return detailAmountVos;
     }
 }
