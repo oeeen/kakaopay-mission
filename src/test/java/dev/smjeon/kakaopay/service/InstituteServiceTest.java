@@ -34,7 +34,7 @@ class InstituteServiceTest {
 
     @Test
     void saveRow() {
-        given(row.getColumn(any(Integer.class))).willReturn("주택기금");
+        given(row.getColumn(any(Integer.class))).willReturn("주택도시기금");
         given(row.size()).willReturn(6); // 임의의 숫자
 
         instituteService.saveRow(row);
@@ -46,6 +46,6 @@ class InstituteServiceTest {
     void findByName() {
         given(instituteRepository.findByName(any(String.class))).willReturn(Optional.of(institute));
 
-        assertDoesNotThrow(() -> instituteService.findByName("주택기금"));
+        assertDoesNotThrow(() -> instituteService.findByName("주택도시기금"));
     }
 }

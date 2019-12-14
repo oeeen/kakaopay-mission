@@ -14,11 +14,14 @@ public class Institute {
 
     private String name;
 
+    private String code;
+
     private Institute() {
     }
 
     public Institute(String name) {
         this.name = name;
+        this.code = InstituteCode.getInstituteCodeByName(name);
     }
 
     public Long getId() {
