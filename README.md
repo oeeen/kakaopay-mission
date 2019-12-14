@@ -22,6 +22,7 @@ https://localhost:8080 에 접속하여 csv 파일을 업로드하여야 데이�
     - `GET /institutes`
     - `GET /years`
     - `GET /maxfund`
+    - `GET /average`
 
 모든 API Test 는 Controller Test 를 통해 수행할 수 있습니다.
 
@@ -50,6 +51,25 @@ https://localhost:8080 에 접속하여 csv 파일을 업로드하여야 데이�
 - 전체 년도(2005 ~ 2016)에서 외환은행의 지원금액 평균 중에서 가장 작은 금액과 큰 금액을 출력하는 API 개발
     - 예를들어, 2005 년 ~ 2016 년 외환은행의 평균 지원금액 (매년 12 달의 지원금액 평균값)을 계산하여 가장 작은 값과 큰 값을 출력합니다. 소수점 이하는 반올림해서 계산하세요.
         - `GET /average` 요청 시 외환은행의 평균 지원 금액을 계산하여 최소값, 최대값을 출력합니다.
+        - 지원 금액 합계에서 사용한 jpql 메서드를 재활용 하여 년 단위 합계를 구한 후 최소, 최대값 계산
+        - 구해진 최소, 최대값을 12로 나누어 평균 최소, 최대값 계산 후 출력
+        
+- Entity
+    - Fund
+        - Long id (PK)
+        - Year year
+        - Month month
+        - Institute institute
+            - ManyToOne mapping
+        - Amount amount
+            - Integer 값 wrapping 한 Vo Class
+            - 데이터 중 "," 들어간 경우 "," 제거하는 로직
+    - Institute
+        - Long id (PK)
+        - String name
+            - 이름을 가지고 InstituteCode 에서 일치하는 code 를 반환 받아 내부의 code 도 생성
+        - String code
+            - InstituteCode 에 임의로 설정된 code 값을 매칭 시켜 사용
         
 ### 선택 문제(옵션)
 
