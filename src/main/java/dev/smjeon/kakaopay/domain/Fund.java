@@ -27,6 +27,9 @@ public class Fund {
     @Embedded
     private Amount amount;
 
+    private Fund() {
+    }
+
     public Fund(Year year, Month month, Institute institute, Amount amount) {
         this.year = year;
         this.month = month;
