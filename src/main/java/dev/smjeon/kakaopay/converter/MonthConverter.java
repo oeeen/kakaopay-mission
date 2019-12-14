@@ -1,4 +1,4 @@
-package dev.smjeon.kakaopay;
+package dev.smjeon.kakaopay.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

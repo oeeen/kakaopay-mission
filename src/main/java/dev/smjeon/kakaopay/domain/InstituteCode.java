@@ -1,6 +1,6 @@
 package dev.smjeon.kakaopay.domain;
 
-import dev.smjeon.kakaopay.service.NotFoundInstituteException;
+import dev.smjeon.kakaopay.service.exception.NotFoundInstituteException;
 
 import java.util.Arrays;
 

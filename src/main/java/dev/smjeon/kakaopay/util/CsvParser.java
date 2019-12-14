@@ -2,6 +2,7 @@ package dev.smjeon.kakaopay.util;
 
 import com.opencsv.CSVReader;
 import dev.smjeon.kakaopay.domain.Row;
+import dev.smjeon.kakaopay.util.exception.CsvParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;

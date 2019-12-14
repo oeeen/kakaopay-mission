@@ -3,6 +3,7 @@ package dev.smjeon.kakaopay.service;
 import dev.smjeon.kakaopay.domain.Institute;
 import dev.smjeon.kakaopay.domain.InstituteRepository;
 import dev.smjeon.kakaopay.domain.Row;
+import dev.smjeon.kakaopay.service.exception.NotFoundInstituteException;
 import dev.smjeon.kakaopay.util.InstituteConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

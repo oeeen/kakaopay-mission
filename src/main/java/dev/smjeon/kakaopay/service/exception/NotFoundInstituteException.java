@@ -1,4 +1,4 @@
-package dev.smjeon.kakaopay.service;
+package dev.smjeon.kakaopay.service.exception;
 
 public class NotFoundInstituteException extends RuntimeException {
     public NotFoundInstituteException() {
