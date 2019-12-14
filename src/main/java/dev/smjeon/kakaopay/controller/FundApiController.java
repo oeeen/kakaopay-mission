@@ -21,7 +21,7 @@ public class FundApiController {
     }
 
     @PostMapping("/amount")
-    public ResponseEntity saveHouses(MultipartFile file) {
+    public ResponseEntity saveFunds(MultipartFile file) {
         int affected = fundService.saveCsv(file);
         Map<String, Integer> body = new HashMap<>();
         body.put("AffectedRows", affected);
@@ -30,7 +30,7 @@ public class FundApiController {
     }
 
     @GetMapping("/institutes")
-    public ResponseEntity listInstitutes() {
+    public ResponseEntity<List<InstituteResponseDto>> listInstitutes() {
         List<InstituteResponseDto> instituteResponseDtos = fundService.findAllInstitutes();
         return ResponseEntity.ok().body(instituteResponseDtos);
     }
