@@ -1,6 +1,7 @@
 package dev.smjeon.kakaopay.vo;
 
 import java.time.Year;
+import java.util.Objects;
 
 public class DetailAmountVo {
     private Year year;
@@ -23,5 +24,20 @@ public class DetailAmountVo {
 
     public Long getAmount() {
         return amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DetailAmountVo that = (DetailAmountVo) o;
+        return Objects.equals(year, that.year) &&
+                Objects.equals(instituteName, that.instituteName) &&
+                Objects.equals(amount, that.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(year, instituteName, amount);
     }
 }
