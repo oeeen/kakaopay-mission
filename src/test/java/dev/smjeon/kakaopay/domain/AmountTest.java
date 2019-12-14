@@ -1,5 +1,6 @@
 package dev.smjeon.kakaopay.domain;
 
+import dev.smjeon.kakaopay.vo.Amount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

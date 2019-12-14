@@ -1,6 +1,5 @@
 package dev.smjeon.kakaopay.service;
 
-import dev.smjeon.kakaopay.domain.Amount;
 import dev.smjeon.kakaopay.domain.Fund;
 import dev.smjeon.kakaopay.domain.FundRepository;
 import dev.smjeon.kakaopay.domain.Institute;
@@ -12,6 +11,7 @@ import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import dev.smjeon.kakaopay.service.exception.NotFoundMaxAmountException;
 import dev.smjeon.kakaopay.util.CsvParser;
 import dev.smjeon.kakaopay.util.InstituteConverter;
+import dev.smjeon.kakaopay.vo.Amount;
 import dev.smjeon.kakaopay.vo.DetailAmountVo;
 import dev.smjeon.kakaopay.vo.MinMaxVo;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package dev.smjeon.kakaopay.domain;
+package dev.smjeon.kakaopay.vo;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;

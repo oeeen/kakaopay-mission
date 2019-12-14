@@ -1,5 +1,7 @@
 package dev.smjeon.kakaopay.domain;
 
+import dev.smjeon.kakaopay.vo.Amount;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
