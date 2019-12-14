@@ -13,6 +13,10 @@ public class Amount {
         this.amount = Integer.parseInt(validate(amount));
     }
 
+    public Integer getAmount() {
+        return amount;
+    }
+
     private String validate(String amount) {
         return amount.replaceAll(",", "");
     }

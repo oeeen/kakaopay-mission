@@ -25,4 +25,8 @@ public class YearsAmountResponseDto {
     public Map<String, Long> getDetailAmount() {
         return detailAmount;
     }
+
+    public Long getValue(String key) {
+        return detailAmount.get(key);
+    }
 }
