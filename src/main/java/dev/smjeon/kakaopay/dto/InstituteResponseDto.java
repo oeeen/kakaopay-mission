@@ -1,4 +1,4 @@
-package dev.smjeon.kakaopay.domain;
+package dev.smjeon.kakaopay.dto;
 
 public class InstituteResponseDto {
     private String name;

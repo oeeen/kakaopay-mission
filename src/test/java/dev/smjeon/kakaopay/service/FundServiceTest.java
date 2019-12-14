@@ -1,7 +1,7 @@
 package dev.smjeon.kakaopay.service;
 
 import dev.smjeon.kakaopay.domain.Institute;
-import dev.smjeon.kakaopay.domain.InstituteResponseDto;
+import dev.smjeon.kakaopay.dto.InstituteResponseDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
