@@ -10,10 +10,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
-@AutoConfigureWebTestClient
+@DirtiesContext
+@AutoConfigureWebTestClient(timeout = "10000")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class FundApiControllerTest {
 
@@ -21,7 +23,7 @@ class FundApiControllerTest {
     private WebTestClient webTestClient;
 
     @Test
-    @Timeout(10000)
+    @Timeout(value = 10)
     @DisplayName(".csv 파일에서 데이터를 읽어와 데이터베이스에 저장합니다.")
     void loadCsv() {
         ClassPathResource classPathResource = new ClassPathResource("input.csv");
@@ -39,5 +41,18 @@ class FundApiControllerTest {
                 .isOk()
                 .expectBody()
                 .jsonPath("$..AffectedRows").isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("주택금융 공급 금융기관(은행) 목록을 출력합니다.")
+    void listAllInstitutes() {
+        webTestClient.get()
+                .uri("/institutes")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .jsonPath("$..name").isEqualTo("테스트은행")
+                .jsonPath("$..code").isEqualTo("test123");
     }
 }

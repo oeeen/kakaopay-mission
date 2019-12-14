@@ -7,6 +7,8 @@ import dev.smjeon.kakaopay.util.InstituteConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class InstituteService {
@@ -27,5 +29,9 @@ public class InstituteService {
 
     public Institute findByName(String name) {
         return instituteRepository.findByName(name).orElseThrow(NotFoundInstituteException::new);
+    }
+
+    public List<Institute> findAll() {
+        return instituteRepository.findAll();
     }
 }

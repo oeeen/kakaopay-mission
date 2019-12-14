@@ -48,4 +48,10 @@ class InstituteServiceTest {
 
         assertDoesNotThrow(() -> instituteService.findByName("주택도시기금"));
     }
+
+    @Test
+    void findAll() {
+        instituteService.findAll();
+        verify(instituteRepository, times(1)).findAll();
+    }
 }

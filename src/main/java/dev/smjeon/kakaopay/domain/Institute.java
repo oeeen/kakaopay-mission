@@ -31,4 +31,8 @@ public class Institute {
     public String getName() {
         return name;
     }
+
+    public String getCode() {
+        return code;
+    }
 }

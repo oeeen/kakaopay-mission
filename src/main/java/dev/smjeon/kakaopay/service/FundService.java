@@ -3,6 +3,8 @@ package dev.smjeon.kakaopay.service;
 import dev.smjeon.kakaopay.domain.Amount;
 import dev.smjeon.kakaopay.domain.Fund;
 import dev.smjeon.kakaopay.domain.FundRepository;
+import dev.smjeon.kakaopay.domain.Institute;
+import dev.smjeon.kakaopay.domain.InstituteResponseDto;
 import dev.smjeon.kakaopay.domain.Row;
 import dev.smjeon.kakaopay.util.CsvParser;
 import dev.smjeon.kakaopay.util.InstituteConverter;
@@ -63,5 +65,17 @@ public class FundService {
             logger.debug("Inserted Fund: {}", fund);
         }
         return oneRow;
+    }
+
+    public List<InstituteResponseDto> findAllInstitutes() {
+        List<InstituteResponseDto> instituteResponseDtos = new ArrayList<>();
+        List<Institute> institutes = instituteService.findAll();
+
+        for (Institute institute : institutes) {
+            InstituteResponseDto instituteResponseDto = new InstituteResponseDto(institute.getName(), institute.getCode());
+            instituteResponseDtos.add(instituteResponseDto);
+        }
+
+        return instituteResponseDtos;
     }
 }
