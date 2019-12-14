@@ -90,7 +90,7 @@ class FundApiControllerTest {
                 .expectBody()
                 .jsonPath("$.maximum.year").isEqualTo("2015")
                 .jsonPath("$.minimum.year").isEqualTo("2017")
-                .jsonPath("$.maximum.amount").isEqualTo(1701L)
+                .jsonPath("$.maximum.amount").isEqualTo(1702L)
                 .jsonPath("$.minimum.amount").isEqualTo(0L);
     }
 

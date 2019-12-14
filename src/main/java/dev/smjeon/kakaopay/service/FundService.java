@@ -33,7 +33,7 @@ import java.util.Map;
 public class FundService {
     private static final Logger logger = LoggerFactory.getLogger(FundService.class);
     private static final String KEB = "외환은행";
-    private static final int MONTH_DIVISOR_OFFSET = 12;
+    private static final float MONTH_DIVISOR_OFFSET = 12;
 
     private final FundRepository fundRepository;
 
@@ -164,16 +164,19 @@ public class FundService {
                 detailAmountVos.stream()
                 .filter(vo -> vo.getInstituteName().equals(KEB))
                 .max(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
-        MinMaxVo max = new MinMaxVo(maxDetailAmountVo.getYear(),
-                maxDetailAmountVo.getAmount() / MONTH_DIVISOR_OFFSET);
+        MinMaxVo max = getMinMaxVo(maxDetailAmountVo);
 
         DetailAmountVo minDetailAmountVo =
                 detailAmountVos.stream()
                 .filter(vo -> vo.getInstituteName().equals(KEB))
                 .min(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
-        MinMaxVo min = new MinMaxVo(minDetailAmountVo.getYear(),
-                minDetailAmountVo.getAmount() / MONTH_DIVISOR_OFFSET);
+        MinMaxVo min = getMinMaxVo(minDetailAmountVo);
 
         return new MinMaxResponseDto(min, max);
+    }
+
+    private MinMaxVo getMinMaxVo(DetailAmountVo detailAmountVo) {
+        int round = Math.round(detailAmountVo.getAmount() / MONTH_DIVISOR_OFFSET);
+        return new MinMaxVo(detailAmountVo.getYear(), (long) round);
     }
 }
