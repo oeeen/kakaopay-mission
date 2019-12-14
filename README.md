@@ -16,6 +16,10 @@ $ java -jar build/libs/kakaopay-0.0.1-SNAPSHOT.jar
 
 https://localhost:8080 에 접속하여 csv 파일을 업로드하여야 데이터베이스에 해당 데이터가 들어갑니다.
 
+1. https://localhost:8080
+2. csv 파일 업로드
+3. 각 api 요청
+    - `GET /institutes`
 모든 API Test 는 Controller Test 를 통해 수행할 수 있습니다.
 
 ## 개발 프레임워크
@@ -31,6 +35,7 @@ https://localhost:8080 에 접속하여 csv 파일을 업로드하여야 데이�
 - 데이터 파일에서 각 레코드를 데이터베이스에 저장하는 API 개발
     - 메인 페이지에서 csv 파일을 받아 parsing 하여 Fund Entity 로 저장
 - 주택 금융 공급 금융기관(은행) 목록을 출력하는 API 를 개발하세요.
+    - `GET /institutes` 요청 시 은행 목록 출력
 - 년도별 각 금융기관의 지원금액 합계를 출력하는 API 를 개발하세요.
 - 각 년도 별 각 기관의 전체 지원 금액 중에서 가장 큰 금액의 기관명을 출력하는 API 개발
     - 예를들어, 2005 년 ~ 2017 년 중에 2010 년 국민은행의 전체 지원금액(1 월 ~ 12 월 지원 합계)이 가장 높았다면 { “year": “2010” , "bank": “국민은행”}을 결과로 출력합니다.
