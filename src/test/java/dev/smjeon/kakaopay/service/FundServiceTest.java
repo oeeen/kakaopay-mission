@@ -3,6 +3,7 @@ package dev.smjeon.kakaopay.service;
 import dev.smjeon.kakaopay.domain.FundRepository;
 import dev.smjeon.kakaopay.domain.Institute;
 import dev.smjeon.kakaopay.dto.InstituteResponseDto;
+import dev.smjeon.kakaopay.dto.MaxAmountResponseDto;
 import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,5 +70,27 @@ class FundServiceTest {
 
         verify(fundRepository).findSumByYearGroupByInstitute(Year.of(2005));
         verify(fundRepository).findDistinctYear();
+    }
+
+    @Test
+    @DisplayName("전체 지원 금액 중 가장 큰 금액의 기관명 출력 로직 검사")
+    void findInstituteByMaxAmount() {
+        List<Year> years = Collections.singletonList(Year.of(2005));
+        List<Object> sumByYearGroupByInstitute = new ArrayList<>();
+        Object[] sumInstitute = {new Institute("주택도시기금"), 1000L};
+        sumByYearGroupByInstitute.add(sumInstitute);
+        Object[] maxInstitute = {new Institute("신한은행"), 2000L};
+        sumByYearGroupByInstitute.add(maxInstitute);
+
+        given(fundRepository.findDistinctYear()).willReturn(years);
+        given(fundRepository.findSumByYearGroupByInstitute(any(Year.class))).willReturn(sumByYearGroupByInstitute);
+
+        MaxAmountResponseDto maxAmountResponseDto = fundService.findInstituteByMaxAmount();
+
+        assertThat(maxAmountResponseDto.getInstituteName()).isEqualTo("신한은행");
+        assertThat(maxAmountResponseDto.getYear()).isEqualTo(Year.of(2005));
+
+        verify(fundRepository).findDistinctYear();
+        verify(fundRepository).findSumByYearGroupByInstitute(Year.of(2005));
     }
 }
