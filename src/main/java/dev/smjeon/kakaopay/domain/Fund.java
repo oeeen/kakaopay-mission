@@ -64,15 +64,11 @@ public class Fund {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Fund fund = (Fund) o;
-        return amount == fund.amount &&
-                Objects.equals(id, fund.id) &&
-                Objects.equals(year, fund.year) &&
-                month == fund.month &&
-                Objects.equals(institute, fund.institute);
+        return id.equals(fund.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, year, month, institute, amount);
+        return Objects.hash(id);
     }
 }
