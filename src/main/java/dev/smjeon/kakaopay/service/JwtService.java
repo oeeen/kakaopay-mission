@@ -1,6 +1,7 @@
 package dev.smjeon.kakaopay.service;
 
 import dev.smjeon.kakaopay.controller.support.exception.NotAuthorizedException;
+import dev.smjeon.kakaopay.service.exception.JwtGenerateException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -32,7 +33,7 @@ public class JwtService {
                     .compact();
         } catch (UnsupportedEncodingException e) {
             logger.error("Jwt Exception", e);
-            throw new IllegalArgumentException();
+            throw new JwtGenerateException();
         }
     }
 
