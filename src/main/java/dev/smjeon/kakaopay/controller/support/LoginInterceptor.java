@@ -19,9 +19,15 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader(AUTHORIZATION);
+        String headerValue = request.getHeader(AUTHORIZATION);
 
-        if (token != null && jwtService.isUsable(token)) {
+        if (headerValue != null && headerValue.contains("Bearer")) {
+            String refreshToken = jwtService.refreshToken(headerValue);
+            response.setHeader(AUTHORIZATION, refreshToken);
+            return true;
+        }
+
+        if (headerValue != null && jwtService.isUsable(headerValue)) {
             return true;
         }
 

@@ -30,7 +30,7 @@ public class UserService {
     public UserResponseDto save(UserRequestDto userRequestDto) {
         String afterPassword = passwordEncryptors.encrypt(userRequestDto.getUserPassword());
         User user = new User(userRequestDto.getUserId(), afterPassword);
-        String token = jwtService.generateToken(userRequestDto);
+        String token = jwtService.generateToken(userRequestDto.getUserId());
 
         if (userRepository.existsByUserId(userRequestDto.getUserId())) {
             throw new AlreadyExistUserException();
@@ -51,7 +51,7 @@ public class UserService {
             throw new WrongPasswordException();
         }
 
-        return jwtService.generateToken(userRequestDto);
+        return jwtService.generateToken(userRequestDto.getUserId());
     }
 
     private boolean isSamePassword(String requestPassword, String encryptedPassword) {
