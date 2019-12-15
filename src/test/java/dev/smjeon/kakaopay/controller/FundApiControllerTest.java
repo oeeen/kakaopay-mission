@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+
+import java.io.File;
+import java.io.IOException;
 
 @AutoConfigureWebTestClient(timeout = "200000")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,7 +30,7 @@ class FundApiControllerTest {
     @Timeout(value = 20)
     @DisplayName(".csv 파일에서 데이터를 읽어와 데이터베이스에 저장합니다.")
     @DirtiesContext
-    void loadCsv() {
+    void loadCsv() throws IOException {
         readCsv().expectBody()
                 .jsonPath("$..AffectedRows").isNotEmpty();
     }
@@ -51,7 +53,7 @@ class FundApiControllerTest {
     @Test
     @DisplayName("년도별 각 금융기관의 지원금액 합계를 출력합니다.")
     @DirtiesContext
-    void totalAmountByYear() {
+    void totalAmountByYear() throws IOException {
         readCsv();
 
         String token = getToken(TOKEN_ID, TOKEN_PASSWORD);
@@ -70,7 +72,7 @@ class FundApiControllerTest {
     @Test
     @DisplayName("전체 지원 금액 중에서 가장 큰 금액의 기관명을 출력합니다.")
     @DirtiesContext
-    void getInstituteByMaxAmount() {
+    void getInstituteByMaxAmount() throws IOException {
         readCsv();
 
         String token = getToken(TOKEN_ID, TOKEN_PASSWORD);
@@ -88,7 +90,7 @@ class FundApiControllerTest {
     @Test
     @DisplayName("외환은행의 평균 지원 금액 중 최소값, 최대값을 출력합니다.")
     @DirtiesContext
-    void findKEBAverageMinMax() {
+    void findKEBAverageMinMax() throws IOException {
         readCsv();
 
         String token = getToken(TOKEN_ID, TOKEN_PASSWORD);
@@ -105,17 +107,14 @@ class FundApiControllerTest {
                 .jsonPath("$.minimum.amount").isEqualTo(0L);
     }
 
-    WebTestClient.ResponseSpec readCsv() {
+    WebTestClient.ResponseSpec readCsv() throws IOException {
         ClassPathResource classPathResource = new ClassPathResource("input.csv");
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        HttpEntity<ClassPathResource> entity = new HttpEntity<>(classPathResource, headers);
+        File file = classPathResource.getFile();
 
         return webTestClient.post()
                 .uri("/amount")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(BodyInserters.fromMultipartData("file", entity))
+                .body(BodyInserters.fromMultipartData("file", new FileSystemResource(file)))
                 .exchange()
                 .expectStatus()
                 .isOk();
