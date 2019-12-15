@@ -256,7 +256,7 @@ Authorization: Bearer Token
     "year": "2018",
     "month": "FEBRUARY",
     "amount": {
-        "amount": 4880
+        "amount": 4849
     }
 }
 ```
