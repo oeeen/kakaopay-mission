@@ -4,6 +4,7 @@ import dev.smjeon.kakaopay.domain.User;
 import dev.smjeon.kakaopay.domain.UserRepository;
 import dev.smjeon.kakaopay.dto.UserRequestDto;
 import dev.smjeon.kakaopay.dto.UserResponseDto;
+import dev.smjeon.kakaopay.util.PasswordEncryptors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,8 @@ public class UserService {
 
     @Transactional
     public UserResponseDto save(UserRequestDto userRequestDto) {
-        User user = new User(userRequestDto.getUserId(), userRequestDto.getUserPassword());
+        String afterPassword = PasswordEncryptors.encrypt(userRequestDto.getUserPassword());
+        User user = new User(userRequestDto.getUserId(), afterPassword);
         String token = jwtService.signUp(userRequestDto);
 
         User savedUser = userRepository.save(user);
