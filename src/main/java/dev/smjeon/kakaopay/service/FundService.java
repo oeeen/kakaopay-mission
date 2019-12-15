@@ -7,6 +7,8 @@ import dev.smjeon.kakaopay.domain.Row;
 import dev.smjeon.kakaopay.dto.InstituteResponseDto;
 import dev.smjeon.kakaopay.dto.MaxAmountResponseDto;
 import dev.smjeon.kakaopay.dto.MinMaxResponseDto;
+import dev.smjeon.kakaopay.dto.PredictRequestDto;
+import dev.smjeon.kakaopay.dto.PredictResponseDto;
 import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import dev.smjeon.kakaopay.service.exception.NotFoundMaxAmountException;
 import dev.smjeon.kakaopay.util.CsvParser;
@@ -14,6 +16,7 @@ import dev.smjeon.kakaopay.util.InstituteConverter;
 import dev.smjeon.kakaopay.vo.Amount;
 import dev.smjeon.kakaopay.vo.DetailAmountVo;
 import dev.smjeon.kakaopay.vo.MinMaxVo;
+import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -178,5 +181,23 @@ public class FundService {
     private MinMaxVo getMinMaxVo(DetailAmountVo detailAmountVo) {
         int round = Math.round(detailAmountVo.getAmount() / MONTH_DIVISOR_OFFSET);
         return new MinMaxVo(detailAmountVo.getYear(), (long) round);
+    }
+
+    public PredictResponseDto predict(PredictRequestDto predictRequestDto) {
+
+        Institute foundInstitute = instituteService.findByName(predictRequestDto.getInstituteName());
+
+        List<Fund> fundsOfInstitute = fundRepository.findAllByInstituteOrderByYearAscMonthAsc(foundInstitute);
+
+        SimpleRegression simpleRegression = new SimpleRegression();
+        for (int i = 0; i < fundsOfInstitute.size(); i++) {
+            simpleRegression.addData(i, fundsOfInstitute.get(i).getAmountValue());
+        }
+
+        String instituteName = predictRequestDto.getInstituteName();
+        Month month = predictRequestDto.getMonth();
+        int predict = (int)simpleRegression.predict(fundsOfInstitute.size() + predictRequestDto.getMonth().getValue() + 1);
+
+        return new PredictResponseDto(instituteName, Year.of(2018), month, Amount.of(predict));
     }
 }

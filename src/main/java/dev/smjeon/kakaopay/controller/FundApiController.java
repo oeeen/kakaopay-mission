@@ -3,14 +3,18 @@ package dev.smjeon.kakaopay.controller;
 import dev.smjeon.kakaopay.dto.InstituteResponseDto;
 import dev.smjeon.kakaopay.dto.MaxAmountResponseDto;
 import dev.smjeon.kakaopay.dto.MinMaxResponseDto;
+import dev.smjeon.kakaopay.dto.PredictRequestDto;
+import dev.smjeon.kakaopay.dto.PredictResponseDto;
 import dev.smjeon.kakaopay.dto.YearsAmountResponseDto;
 import dev.smjeon.kakaopay.service.FundService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,5 +62,14 @@ public class FundApiController {
         MinMaxResponseDto minMaxResponseDto = fundService.findAverageMinMax();
 
         return ResponseEntity.ok().body(minMaxResponseDto);
+    }
+
+    @GetMapping("/predict")
+    public ResponseEntity<PredictResponseDto> getPredict(@RequestParam String instituteName,
+                                                         @RequestParam int month) {
+        PredictRequestDto predictRequestDto = new PredictRequestDto(instituteName, Month.of(month));
+        PredictResponseDto predictResponseDto = fundService.predict(predictRequestDto);
+
+        return ResponseEntity.ok().body(predictResponseDto);
     }
 }

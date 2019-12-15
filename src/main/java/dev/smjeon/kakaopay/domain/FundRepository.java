@@ -12,4 +12,6 @@ public interface FundRepository extends JpaRepository<Fund, Long> {
 
     @Query("SELECT DISTINCT(f.year) FROM Fund f")
     List<Year> findDistinctYear();
+
+    List<Fund> findAllByInstituteOrderByYearAscMonthAsc(Institute institute);
 }

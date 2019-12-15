@@ -10,8 +10,16 @@ public class Amount {
     private Amount() {
     }
 
+    private Amount(Integer amount) {
+        this.amount = amount;
+    }
+
     public Amount(final String amount) {
         this.amount = Integer.parseInt(validate(amount));
+    }
+
+    public static Amount of(final Integer amount) {
+        return new Amount(amount);
     }
 
     public Integer getAmount() {

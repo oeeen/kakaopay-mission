@@ -59,6 +59,10 @@ public class Fund {
         return amount;
     }
 
+    public Integer getAmountValue() {
+        return amount.getAmount();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

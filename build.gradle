@@ -18,7 +18,7 @@ dependencies {
 	implementation 'com.opencsv:opencsv:5.0'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'de.svenkubiak:jBCrypt:0.4.1'
-
+	implementation 'org.apache.commons:commons-math3:3.6.1'
 
 	runtimeOnly 'com.h2database:h2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

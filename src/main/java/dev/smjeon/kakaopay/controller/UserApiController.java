@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api")
-public class UserApiController {
+public class    UserApiController {
     private static final String AUTHORIZATION = "Authorization";
 
     private final UserService userService;
