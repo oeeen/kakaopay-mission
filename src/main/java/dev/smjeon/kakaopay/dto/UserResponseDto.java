@@ -3,10 +3,12 @@ package dev.smjeon.kakaopay.dto;
 public class UserResponseDto {
     private Long id;
     private String userId;
+    private String token;
 
-    public UserResponseDto(Long id, String userId) {
+    public UserResponseDto(Long id, String userId, String token) {
         this.id = id;
         this.userId = userId;
+        this.token = token;
     }
 
     public Long getId() {
@@ -15,5 +17,9 @@ public class UserResponseDto {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

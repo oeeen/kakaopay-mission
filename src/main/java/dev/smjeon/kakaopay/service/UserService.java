@@ -12,15 +12,20 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final JwtService jwtService;
+
+    public UserService(final UserRepository userRepository, final JwtService jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     @Transactional
     public UserResponseDto save(UserRequestDto userRequestDto) {
         User user = new User(userRequestDto.getUserId(), userRequestDto.getUserPassword());
+        String token = jwtService.signUp(userRequestDto);
+
         User savedUser = userRepository.save(user);
 
-        return new UserResponseDto(savedUser.getId(), savedUser.getUserId());
+        return new UserResponseDto(savedUser.getId(), savedUser.getUserId(), token);
     }
 }
