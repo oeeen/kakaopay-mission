@@ -17,7 +17,7 @@ public class JwtService {
     private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
     private static final String SECRET = "kakaopay_secret";
     private static final String CHARSET = "UTF-8";
-    public static final String PREFIX = "Bearer ";
+    private static final String PREFIX = "Bearer ";
 
     public String generateToken(String userId) {
         try {
@@ -37,7 +37,7 @@ public class JwtService {
     }
 
     public String refreshToken(String headerValue) {
-        Jws<Claims> claims = null;
+        Jws<Claims> claims;
         String token = headerValue.substring(PREFIX.length());
         try {
             claims = Jwts.parser()
@@ -57,7 +57,6 @@ public class JwtService {
                     .setSigningKey(genKey())
                     .parseClaimsJws(token);
             return true;
-
         } catch (Exception e) {
             throw new NotAuthorizedException();
         }
