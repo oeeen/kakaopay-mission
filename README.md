@@ -1,5 +1,7 @@
 # 사전과제 3 - 주택 금융 서비스 API 개발
 
+**모든 API Test 는 Controller Test 를 통해 수행할 수 있습니다.**
+
 ## 빌드 및 실행 방법
 
 git과 java가 설치되어 있어야 합니다.
@@ -27,8 +29,6 @@ https://localhost:8080 에 접속하여 csv 파일을 업로드하여야 데이�
    - `GET /years`
    - `GET /maxfund`
    - `GET /average`
-
-모든 API Test 는 Controller Test 를 통해 수행할 수 있습니다.
 
 ## 개발 프레임워크
 
