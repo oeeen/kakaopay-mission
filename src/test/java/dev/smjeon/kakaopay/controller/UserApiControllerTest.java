@@ -35,7 +35,7 @@ class UserApiControllerTest {
         webTestClient.post()
                 .uri("/api/signin")
                 .body(BodyInserters.fromFormData("userId", "Martin")
-                .with("userPassword", "password"))
+                        .with("userPassword", "password"))
                 .exchange()
                 .expectStatus()
                 .isOk();

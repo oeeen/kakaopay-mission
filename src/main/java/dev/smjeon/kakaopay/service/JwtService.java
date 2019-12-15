@@ -48,7 +48,7 @@ public class JwtService {
             throw new NotAuthorizedException();
         }
 
-        String userId = (String)(claims.getBody().get("name"));
+        String userId = (String) (claims.getBody().get("name"));
         return generateToken(userId);
     }
 

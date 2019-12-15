@@ -115,8 +115,8 @@ public class FundService {
         Long sum = 0L;
 
         for (Object o : sumByYearGroupByInstitute) {
-            Long amount = ((Long)((Object[])o)[1]);
-            String name = ((Institute)((Object[])o)[0]).getName();
+            Long amount = ((Long) ((Object[]) o)[1]);
+            String name = ((Institute) ((Object[]) o)[0]).getName();
 
             detailAmount.put(name, amount);
             sum += amount;
@@ -144,8 +144,8 @@ public class FundService {
         List<DetailAmountVo> detailAmountVos = new ArrayList<>();
 
         for (Object o : sumByYearGroupByInstitute) {
-            String name = ((Institute)((Object[])o)[0]).getName();
-            Long amount = ((Long)((Object[])o)[1]);
+            String name = ((Institute) ((Object[]) o)[0]).getName();
+            Long amount = ((Long) ((Object[]) o)[1]);
             detailAmountVos.add(new DetailAmountVo(year, name, amount));
         }
         return detailAmountVos;
@@ -165,14 +165,14 @@ public class FundService {
     private MinMaxResponseDto convertToMinMaxDto(List<DetailAmountVo> detailAmountVos) {
         DetailAmountVo maxDetailAmountVo =
                 detailAmountVos.stream()
-                .filter(vo -> vo.getInstituteName().equals(KEB))
-                .max(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
+                        .filter(vo -> vo.getInstituteName().equals(KEB))
+                        .max(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
         MinMaxVo max = getMinMaxVo(maxDetailAmountVo);
 
         DetailAmountVo minDetailAmountVo =
                 detailAmountVos.stream()
-                .filter(vo -> vo.getInstituteName().equals(KEB))
-                .min(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
+                        .filter(vo -> vo.getInstituteName().equals(KEB))
+                        .min(Comparator.comparing(DetailAmountVo::getAmount)).orElseThrow(NotFoundMaxAmountException::new);
         MinMaxVo min = getMinMaxVo(minDetailAmountVo);
 
         return new MinMaxResponseDto(min, max);
@@ -196,7 +196,7 @@ public class FundService {
 
         String instituteName = predictRequestDto.getInstituteName();
         Month month = predictRequestDto.getMonth();
-        int predict = (int)simpleRegression.predict(fundsOfInstitute.size() + month.getValue());
+        int predict = (int) simpleRegression.predict(fundsOfInstitute.size() + month.getValue());
 
         return new PredictResponseDto(instituteName, Year.of(2018), month, Amount.of(predict));
     }
