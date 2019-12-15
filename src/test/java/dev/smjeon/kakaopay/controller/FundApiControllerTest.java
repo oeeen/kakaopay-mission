@@ -17,6 +17,9 @@ import org.springframework.web.reactive.function.BodyInserters;
 @AutoConfigureWebTestClient(timeout = "200000")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class FundApiControllerTest {
+    private static final String TOKEN_ID = "tokenId";
+    private static final String TOKEN_PASSWORD = "tokenPassword";
+    private static final String AUTHORIZATION = "Authorization";
 
     @Autowired
     private WebTestClient webTestClient;
@@ -33,8 +36,10 @@ class FundApiControllerTest {
     @Test
     @DisplayName("주택금융 공급 금융기관(은행) 목록을 출력합니다.")
     void listAllInstitutes() {
+        String token = getToken(TOKEN_ID, TOKEN_PASSWORD);
         webTestClient.get()
                 .uri("/institutes")
+                .header(AUTHORIZATION, token)
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -49,8 +54,10 @@ class FundApiControllerTest {
     void totalAmountByYear() {
         readCsv();
 
+        String token = getToken(TOKEN_ID, TOKEN_PASSWORD);
         webTestClient.get()
                 .uri("/years")
+                .header(AUTHORIZATION, token)
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -66,8 +73,10 @@ class FundApiControllerTest {
     void getInstituteByMaxAmount() {
         readCsv();
 
+        String token = getToken(TOKEN_ID, TOKEN_PASSWORD);
         webTestClient.get()
                 .uri("/maxfund")
+                .header(AUTHORIZATION, token)
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -82,8 +91,10 @@ class FundApiControllerTest {
     void findKEBAverageMinMax() {
         readCsv();
 
+        String token = getToken(TOKEN_ID, TOKEN_PASSWORD);
         webTestClient.get()
                 .uri("/average")
+                .header(AUTHORIZATION, token)
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -108,5 +119,16 @@ class FundApiControllerTest {
                 .exchange()
                 .expectStatus()
                 .isOk();
+    }
+
+    private String getToken(String userId, String userPassword) {
+        return webTestClient.post()
+                .uri("/api/signin")
+                .body(BodyInserters.fromFormData("userId", userId)
+                        .with("userPassword", userPassword))
+                .exchange()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
     }
 }

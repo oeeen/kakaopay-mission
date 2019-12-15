@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api")
 public class UserApiController {
+    private static final String AUTHORIZATION = "Authorization";
 
     private final UserService userService;
 
@@ -21,15 +22,16 @@ public class UserApiController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signUp(UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> signUp(UserRequestDto userRequestDto, HttpServletResponse response) {
         UserResponseDto userResponseDto = userService.save(userRequestDto);
+        response.setHeader(AUTHORIZATION, userResponseDto.getToken());
         return ResponseEntity.ok().body(userResponseDto);
     }
 
     @PostMapping("/signin")
     public ResponseEntity<String> signIn(UserRequestDto userRequestDto, HttpServletResponse response) {
         String token = userService.login(userRequestDto);
-        response.setHeader("Authorization", token);
+        response.setHeader(AUTHORIZATION, token);
         return ResponseEntity.ok().body(token);
     }
 }

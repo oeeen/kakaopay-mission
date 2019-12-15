@@ -16,7 +16,7 @@ import java.util.Date;
 @Service
 public class JwtService {
     private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
-    private static final String SECRET = "secret";
+    private static final String SECRET = "kakaopay_secret";
     private static final String CHARSET = "UTF-8";
 
     public String generateToken(UserRequestDto userRequestDto) {
