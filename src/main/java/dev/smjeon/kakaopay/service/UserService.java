@@ -4,6 +4,7 @@ import dev.smjeon.kakaopay.domain.User;
 import dev.smjeon.kakaopay.domain.UserRepository;
 import dev.smjeon.kakaopay.dto.UserRequestDto;
 import dev.smjeon.kakaopay.dto.UserResponseDto;
+import dev.smjeon.kakaopay.service.exception.AlreadyExistUserException;
 import dev.smjeon.kakaopay.service.exception.NotFoundUserException;
 import dev.smjeon.kakaopay.service.exception.WrongPasswordException;
 import dev.smjeon.kakaopay.util.PasswordEncryptors;
@@ -31,8 +32,11 @@ public class UserService {
         User user = new User(userRequestDto.getUserId(), afterPassword);
         String token = jwtService.generateToken(userRequestDto);
 
-        User savedUser = userRepository.save(user);
+        if (userRepository.existsByUserId(userRequestDto.getUserId())) {
+            throw new AlreadyExistUserException();
+        }
 
+        User savedUser = userRepository.save(user);
         return new UserResponseDto(savedUser.getId(), savedUser.getUserId(), token);
     }
 
