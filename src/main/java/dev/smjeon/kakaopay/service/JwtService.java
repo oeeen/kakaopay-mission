@@ -13,8 +13,10 @@ import java.util.Date;
 @Service
 public class JwtService {
     private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
+    private static final String SECRET = "secret";
+    private static final String CHARSET = "UTF-8";
 
-    public String signUp(UserRequestDto userRequestDto) {
+    public String generateToken(UserRequestDto userRequestDto) {
         try {
             return Jwts.builder()
                     .setHeaderParam("typ", "JWT")
@@ -23,7 +25,7 @@ public class JwtService {
                     .claim("scope", "normal")
                     .signWith(
                             SignatureAlgorithm.HS256,
-                            "secret".getBytes("UTF-8"))
+                            SECRET.getBytes(CHARSET))
                     .compact();
         } catch (UnsupportedEncodingException e) {
             logger.error("Jwt Exception", e);

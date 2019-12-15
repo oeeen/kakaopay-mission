@@ -23,4 +23,10 @@ public class UserApiController {
         UserResponseDto userResponseDto = userService.save(userRequestDto);
         return ResponseEntity.ok().body(userResponseDto);
     }
+
+    @PostMapping("/signin")
+    public ResponseEntity<String> signin(UserRequestDto userRequestDto) {
+        String token = userService.login(userRequestDto);
+        return ResponseEntity.ok().body(token);
+    }
 }
