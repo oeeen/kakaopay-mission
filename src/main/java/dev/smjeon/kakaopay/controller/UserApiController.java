@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/api")
 public class UserApiController {
@@ -25,8 +27,9 @@ public class UserApiController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<String> signin(UserRequestDto userRequestDto) {
+    public ResponseEntity<String> signIn(UserRequestDto userRequestDto, HttpServletResponse response) {
         String token = userService.login(userRequestDto);
+        response.setHeader("Authorization", token);
         return ResponseEntity.ok().body(token);
     }
 }

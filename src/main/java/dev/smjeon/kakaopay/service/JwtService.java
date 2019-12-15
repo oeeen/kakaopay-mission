@@ -1,6 +1,9 @@
 package dev.smjeon.kakaopay.service;
 
+import dev.smjeon.kakaopay.controller.support.exception.NotAuthorizedException;
 import dev.smjeon.kakaopay.dto.UserRequestDto;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
@@ -25,11 +28,27 @@ public class JwtService {
                     .claim("scope", "normal")
                     .signWith(
                             SignatureAlgorithm.HS256,
-                            SECRET.getBytes(CHARSET))
+                            genKey())
                     .compact();
         } catch (UnsupportedEncodingException e) {
             logger.error("Jwt Exception", e);
             throw new IllegalArgumentException();
         }
+    }
+
+    public boolean isUsable(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(genKey())
+                    .parseClaimsJws(token);
+            return true;
+
+        } catch (Exception e) {
+            throw new NotAuthorizedException();
+        }
+    }
+
+    private byte[] genKey() throws UnsupportedEncodingException {
+        return SECRET.getBytes(CHARSET);
     }
 }
