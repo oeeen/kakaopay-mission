@@ -231,6 +231,36 @@ Authorization: Bearer Token
 }
 ```
 
+### 특정 은행의 특정 달에 대해서 2018년도 해당 달에 금융지원 금액을 예측하는 API 개발
+
+- `implementation 'org.apache.commons:commons-math3:3.6.1'` 라이브러리의 선형회귀로 예측
+- JPA의 `List<Fund> findAllByInstituteOrderByYearAscMonthAsc(Institute institute);`로 특정 은행의 모든 지원 금액을 조회(Year, Month로 오름차순)
+- 조회한 `List<Fund>`에서 시간 순(x축)으로 지원금액(Amount, y축)을 그래프를 그립니다.(`simpleRegression.addData(x, y)`)
+- 예측을 원하는 2018년도의 Month에 맞는 값을 넣어줍니다. (`(int)simpleRegression.predict(fundsOfInstitute.size() + predictRequestDto.getMonth().getValue() + 1);`)
+- 나온 결과 값을 Dto로 포장 후 Controller로 넘겨줍니다.
+
+### Request
+
+```request
+GET /predict HTTP/1.1
+Authorization: Bearer Token
+```
+
+- Request의 parameter는 instituteName="국민은행", month=2 와 같은 식으로 넘깁니다. 그 결과는 아래와 같습니다.
+
+### Response
+
+```response
+{
+    "instituteName": "국민은행",
+    "year": "2018",
+    "month": "FEBRUARY",
+    "amount": {
+        "amount": 4880
+    }
+}
+```
+
 ### JWT 이용 인증/인가
 
 - API 인증을 위해 JWT(Json Web Token)를 이용해서 Token 기반 API 인증 기능을 개발하고 각 API 호출 시에 HTTP Header 에 발급받은 토큰을 가지고 호출
@@ -269,8 +299,3 @@ JwpService의 `public String generateToken(String userId)` 메서드에서 jjwt 
       - 이름을 가지고 InstituteCode 에서 일치하는 code 를 반환 받아 내부의 code 도 생성
     - String code
       - InstituteCode 에 임의로 설정된 code 값을 매칭 시켜 사용
-
-### 선택 문제(옵션)
-
-- 특정 은행의 특정 달에 대해서 2018년도 해당 달에 금융지원 금액을 예측하는 API 개발
-  - 단, 예측 알고리즘을 무엇을 써야하는지에 대한 제약은 없지만, 가장 근사치에 가까울 수록 높은 점수 부여
