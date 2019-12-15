@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerTest {
+class UserApiControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -17,7 +17,7 @@ class UserControllerTest {
     @Test
     void signUp() {
         webTestClient.post()
-                .uri("/signup")
+                .uri("/api/signup")
                 .body(BodyInserters.fromFormData("userId", "TestUser")
                         .with("userPassword", "password"))
                 .exchange()

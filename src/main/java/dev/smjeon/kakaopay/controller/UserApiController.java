@@ -5,14 +5,16 @@ import dev.smjeon.kakaopay.dto.UserResponseDto;
 import dev.smjeon.kakaopay.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
+@RequestMapping("/api")
+public class UserApiController {
 
     private final UserService userService;
 
-    public UserController(final UserService userService) {
+    public UserApiController(final UserService userService) {
         this.userService = userService;
     }
 
