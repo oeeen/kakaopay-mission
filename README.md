@@ -49,8 +49,9 @@ https://localhost:8080 에 접속하여 csv 파일을 업로드하여야 데이�
 ```request
 POST /amount HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
-Authorization: Bearer Token
 ```
+
+- Request 에 File 전송(csv)을 해야합니다.
 
 ### Response
 
