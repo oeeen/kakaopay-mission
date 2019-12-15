@@ -107,6 +107,26 @@ class FundApiControllerTest {
                 .jsonPath("$.minimum.amount").isEqualTo(0L);
     }
 
+    @Test
+    @DisplayName("국민은행의 2018년 2월의 지원금액 예측값")
+    @DirtiesContext
+    void predict() throws IOException {
+        readCsv();
+
+        String token = getToken(TOKEN_ID, TOKEN_PASSWORD);
+        webTestClient.get()
+                .uri("/predict?instituteName=국민은행&month=2")
+                .header(AUTHORIZATION, token)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .jsonPath("$.instituteName").isEqualTo("국민은행")
+                .jsonPath("$.year").isEqualTo("2018")
+                .jsonPath("$.month").isEqualTo("FEBRUARY")
+                .jsonPath("$.amount.amount").isEqualTo(4849);
+    }
+
     WebTestClient.ResponseSpec readCsv() throws IOException {
         ClassPathResource classPathResource = new ClassPathResource("input.csv");
         File file = classPathResource.getFile();

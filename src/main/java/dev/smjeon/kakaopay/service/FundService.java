@@ -196,7 +196,7 @@ public class FundService {
 
         String instituteName = predictRequestDto.getInstituteName();
         Month month = predictRequestDto.getMonth();
-        int predict = (int)simpleRegression.predict(fundsOfInstitute.size() + predictRequestDto.getMonth().getValue() + 1);
+        int predict = (int)simpleRegression.predict(fundsOfInstitute.size() + month.getValue());
 
         return new PredictResponseDto(instituteName, Year.of(2018), month, Amount.of(predict));
     }
